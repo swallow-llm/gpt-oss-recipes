@@ -5,7 +5,6 @@ model_path = "/fsx/vb/new-oai/gpt-oss-120b-trfs"
 tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left")
 
 messages = [
-    {"role": "system", "content": "You are a helpful AI assistant."},
     {"role": "user", "content": "Explain tensor parallelism in simple terms."}
 ]
 chat_prompt = tokenizer.apply_chat_template(messages, tokenize=False)
