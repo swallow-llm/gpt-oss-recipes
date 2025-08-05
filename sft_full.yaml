@@ -1,5 +1,5 @@
 # Model
-model_name_or_path: /fsx/vb/new-oai/gpt-oss-20b-trfs-latest
+model_name_or_path: openai/gpt-oss-20b
 attn_implementation: eager
 torch_dtype: bfloat16
 
