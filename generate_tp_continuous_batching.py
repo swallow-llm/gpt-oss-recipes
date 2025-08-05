@@ -1,7 +1,10 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 
-model_path = "/fsx/vb/new-oai/gpt-oss-20b-trfs-latest"
+# Model configuration - uncomment the model size you want to use
+model_path = "/fsx/vb/new-oai/gpt-oss-120b-trfs-latest"  # 120B model (default)
+# model_path = "/fsx/vb/new-oai/gpt-oss-20b-trfs-latest"  # 20B model - uncomment this line and comment the line above
+
 tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left")
 
 # Create a batch of different prompts

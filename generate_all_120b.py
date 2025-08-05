@@ -2,7 +2,10 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 import torch
 from transformers.distributed import DistributedConfig
 
-model_path = "openai/gpt-oss-120b"
+# Model configuration - uncomment the model size you want to use
+model_path = "openai/gpt-oss-120b"  # 120B model (default)
+# model_path = "openai/gpt-oss-20b"  # 20B model - uncomment this line and comment the line above
+
 tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left")
 
 # Set up chat template
@@ -25,6 +28,9 @@ device_map = {
     ),  # Enable Expert Parallelism
     "tp_plan": "auto",  # Enables Tensor Parallelism
 }
+
+# For 20B model, use this simpler device_map instead:
+# device_map = "auto"
 
 model = AutoModelForCausalLM.from_pretrained(
     model_path,

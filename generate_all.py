@@ -1,10 +1,20 @@
-import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
+import torch
+from transformers.distributed import DistributedConfig
 
-model_path = "openai/gpt-oss-120b"
+# Model configuration - uncomment the model size you want to use
+model_path = "openai/gpt-oss-120b"  # 120B model (default)
+# model_path = "openai/gpt-oss-20b"  # 20B model - uncomment this line and comment the line above
+
 tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left")
 
-messages = [{"role": "user", "content": "Explain tensor parallelism in simple terms."}]
+# Set up chat template
+messages = [
+    {
+        "role": "user",
+        "content": "Explain how expert parallelism works in large language models.",
+    }
+]
 chat_prompt = tokenizer.apply_chat_template(messages, tokenize=False)
 
 generation_config = GenerationConfig(
@@ -13,13 +23,19 @@ generation_config = GenerationConfig(
 )
 
 device_map = {
-    "tp_plan": "auto",  # Tensor Parallelism only
+    "distributed_config": DistributedConfig(
+        enable_expert_parallel=1
+    ),  # Enable Expert Parallelism
+    "tp_plan": "auto",  # Enables Tensor Parallelism
 }
+
+# For 20B model, use this simpler device_map instead:
+# device_map = "auto"
 
 model = AutoModelForCausalLM.from_pretrained(
     model_path,
     torch_dtype="auto",
-    attn_implementation="kernels-community/vllm-flash-attn3",  # Flash Attention with Sinks
+    attn_implementation="kernels-community/vllm-flash-attn3",
     **device_map,
 )
 
