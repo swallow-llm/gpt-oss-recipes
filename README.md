@@ -1,13 +1,13 @@
 # OpenAI GPT-OSS Recipes
 
-Collection of scripts demonstrating different optimization techniques for OpenAI's GPT-OSS models (20B and 120B parameters).
+Collection of scripts demonstrating different optimization and fine-tuning techniques for OpenAI's GPT-OSS models (20B and 120B parameters).
 
 ## Scripts
 
-- `generate_tp.py` - Model with Tensor Parallelism (supports both 20B and 120B)
-- `generate_flash_attention.py` - Model with Flash Attention + Tensor Parallelism (supports both 20B and 120B)
-- `generate_tp_continuous_batching.py` - Model with Tensor Parallelism and continuous batching (supports both 20B and 120B)
-- `generate_all.py` - Model with all optimizations: Expert Parallelism, Tensor Parallelism, Flash Attention (supports both 20B and 120B)
+- `generate_tp.py` - Model with Tensor Parallelism.
+- `generate_flash_attention.py` - Model with Flash Attention + Tensor Parallelism.
+- `generate_tp_continuous_batching.py` - Model with Tensor Parallelism and continuous batching.
+- `generate_all.py` - Model with all optimizations: Expert Parallelism, Tensor Parallelism, Flash Attention.
 - `sft.py` - Script for fine-tuning the model using supervised fine-tuning (SFT). Supports both full-parameter training and LoRA training.
 
 ### Model Configuration
