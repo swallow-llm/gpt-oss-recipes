@@ -51,13 +51,13 @@ torchrun --nproc_per_node=x generate_<script_name>.py
 For full-parameter training on one node of 8 GPUs, run:
 
 ```bash
-accelerate launch --config_file zero3.yaml sft.py --config sft_full.yaml
+accelerate launch --config_file zero3.yaml sft.py --config configs/sft_full.yaml
 ```
 
 For LoRA training on one GPU, run:
 
 ```bash
-python sft.py --config sft_lora.yaml
+python sft.py --config configs/sft_lora.yaml
 ```
 
 To change the dataset or training hyperparameters, either modify the `sft_lora.yaml` or `sft_full.yaml` files or pass them as command line arguments e.g.:
