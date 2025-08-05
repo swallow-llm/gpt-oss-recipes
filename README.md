@@ -34,14 +34,17 @@ Next install PyTorch and Triton kernels:
 
 ```sh
 uv pip install torch==2.8.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu128
+```
 
+If your hardware supports the MXFP4 quantization format, you can also install Triton kernels for optimized performance:
+
+```sh
 uv pip install git+https://github.com/triton-lang/triton.git@main#subdirectory=python/triton_kernels
 ```
 
 Finall install the remaining dependencies:
 
 ```sh
-# TODO: Update the requirements to use latest transformers
 uv pip install -r requirements.txt
 ```
 
@@ -49,7 +52,8 @@ uv pip install -r requirements.txt
 
 ### Inference
 
-Before running any script, edit the `model_path` variable to select your desired model size (20B or 120B).
+> [!IMPORTANT]
+> Before running any script, edit the `model_path` variable to select your desired model size (20B or 120B).
 
 Run a generation script:
 
