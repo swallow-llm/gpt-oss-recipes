@@ -24,7 +24,6 @@ chat_prompts = [
 
 generation_config = GenerationConfig(
     max_new_tokens=1000,
-    do_sample=True,
 )
 
 device_map = {

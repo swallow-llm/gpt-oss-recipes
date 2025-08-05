@@ -19,7 +19,6 @@ chat_prompt = tokenizer.apply_chat_template(messages, tokenize=False)
 
 generation_config = GenerationConfig(
     max_new_tokens=1024,
-    do_sample=True,
 )
 
 device_map = {
