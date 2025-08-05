@@ -51,7 +51,11 @@ torchrun --nproc_per_node=x generate_<script_name>.py
 For full-parameter training on one node of 8 GPUs, run:
 
 ```bash
+# Eager attention
 accelerate launch --config_file zero3.yaml sft.py --config configs/sft_full.yaml
+
+# FlashAttention3
+accelerate launch --config_file zero3.yaml sft.py --config configs/sft_full.yaml --attn_implementation kernels-community/vllm-flash-attn3
 ```
 
 For LoRA training on one GPU, run:
