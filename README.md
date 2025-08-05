@@ -6,7 +6,7 @@ Collection of scripts demonstrating different optimization and fine-tuning techn
 
 - `generate_tp.py` - Model with Tensor Parallelism.
 - `generate_flash_attention.py` - Model with Flash Attention + Tensor Parallelism.
-- `generate_tp_continuous_batching.py` - Model with Tensor Parallelism and continuous batching.
+- `generate_tp_continuous_batching.py` - Model with Flash Attnetion + Tensor Parallelism and continuous batching.
 - `generate_all.py` - Model with all optimizations: Expert Parallelism, Tensor Parallelism, Flash Attention.
 - `sft.py` - Script for fine-tuning the model using supervised fine-tuning (SFT). Supports both full-parameter training and LoRA training.
 
