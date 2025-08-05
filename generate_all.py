@@ -21,12 +21,7 @@ generation_config = GenerationConfig(
     max_new_tokens=1024,
 )
 
-device_map = {
-    "distributed_config": DistributedConfig(
-        enable_expert_parallel=1
-    ),  # Enable Expert Parallelism
-    "tp_plan": "auto",  # Enables Tensor Parallelism
-} if "120b" in model_path else { "device_map": "auto" }
+device_map = { "device_map": "auto" } if "120b" in model_path else { "tp_plan": "auto" }
 
 model = AutoModelForCausalLM.from_pretrained(
     model_path,
