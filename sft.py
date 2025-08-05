@@ -26,7 +26,14 @@ accelerate launch \
 from datasets import load_dataset
 from transformers import AutoModelForCausalLM, AutoTokenizer, Mxfp4Config
 
-from trl import ModelConfig, ScriptArguments, SFTConfig, SFTTrainer, TrlParser, get_peft_config
+from trl import (
+    ModelConfig,
+    ScriptArguments,
+    SFTConfig,
+    SFTTrainer,
+    TrlParser,
+    get_peft_config,
+)
 
 
 def main(script_args, training_args, model_args):
@@ -43,7 +50,9 @@ def main(script_args, training_args, model_args):
         quantization_config=quantization_config,
     )
 
-    model = AutoModelForCausalLM.from_pretrained(model_args.model_name_or_path, **model_kwargs)
+    model = AutoModelForCausalLM.from_pretrained(
+        model_args.model_name_or_path, **model_kwargs
+    )
 
     tokenizer = AutoTokenizer.from_pretrained(
         model_args.model_name_or_path,
@@ -61,7 +70,9 @@ def main(script_args, training_args, model_args):
         model=model,
         args=training_args,
         train_dataset=dataset[script_args.dataset_train_split],
-        eval_dataset=dataset[script_args.dataset_test_split] if training_args.eval_strategy != "no" else None,
+        eval_dataset=dataset[script_args.dataset_test_split]
+        if training_args.eval_strategy != "no"
+        else None,
         processing_class=tokenizer,
         peft_config=get_peft_config(model_args),
     )
@@ -74,5 +85,7 @@ def main(script_args, training_args, model_args):
 
 if __name__ == "__main__":
     parser = TrlParser((ScriptArguments, SFTConfig, ModelConfig))
-    script_args, training_args, model_args, _ = parser.parse_args_and_config(return_remaining_strings=True)
+    script_args, training_args, model_args, _ = parser.parse_args_and_config(
+        return_remaining_strings=True
+    )
     main(script_args, training_args, model_args)

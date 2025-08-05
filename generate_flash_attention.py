@@ -17,9 +17,13 @@ generation_config = GenerationConfig(
     max_new_tokens=1024,
 )
 
-device_map = {
-    "tp_plan": "auto",  # Tensor Parallelism only
-} if "120b" in model_path else { "device_map": "auto" }
+device_map = (
+    {
+        "tp_plan": "auto",  # Tensor Parallelism only
+    }
+    if "120b" in model_path
+    else {"device_map": "auto"}
+)
 
 model = AutoModelForCausalLM.from_pretrained(
     model_path,

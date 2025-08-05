@@ -3,7 +3,7 @@ import torch
 from transformers.distributed import DistributedConfig
 
 # Model configuration - uncomment the model size you want to use
-model_path = "openai/gpt-oss-120b"  # 120B model (default)
+model_path = "/fsx/vb/new-oai/gpt-oss-120b-trfs-latest"  # "openai/gpt-oss-120b"  # 120B model (default)
 # model_path = "openai/gpt-oss-20b"  # 20B model - uncomment this line and comment the line above
 
 tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left")
@@ -21,7 +21,14 @@ generation_config = GenerationConfig(
     max_new_tokens=1024,
 )
 
-device_map = { "device_map": "auto" } if "120b" in model_path else { "tp_plan": "auto" }
+device_map = (
+    {
+        "tp_plan": "auto",  # Tensor Parallelism only
+    }
+    if "120b" in model_path
+    else {"device_map": "auto"}
+)
+
 
 model = AutoModelForCausalLM.from_pretrained(
     model_path,
