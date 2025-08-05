@@ -4,12 +4,23 @@ Collection of scripts demonstrating different optimization techniques for OpenAI
 
 ## Scripts
 
-- `generate_flash_attention_20b.py` - 20B model with Flash Attention
-- `generate_tp_20b.py` - 20B model with Tensor Parallelism  
-- `generate_tp_120b.py` - 120B model with Tensor Parallelism
-- `generate_flash_attention_tp_120b.py` - 120B model with Flash Attention + Tensor Parallelism
-- `generate_all_120b.py` - 120B model with all optimizations (Expert Parallelism, Tensor Parallelism, Flash Attention)
+- `generate_tp.py` - Model with Tensor Parallelism (supports both 20B and 120B)
+- `generate_flash_attention.py` - Model with Flash Attention + Tensor Parallelism (supports both 20B and 120B)
+- `generate_tp_continuous_batching.py` - Model with Tensor Parallelism and continuous batching (supports both 20B and 120B)
+- `generate_all.py` - Model with all optimizations: Expert Parallelism, Tensor Parallelism, Flash Attention (supports both 20B and 120B)
 - `sft.py` - Script for fine-tuning the model using supervised fine-tuning (SFT). Supports both full-parameter training and LoRA training.
+
+### Model Configuration
+
+All generation scripts support both 20B and 120B models. To switch between model sizes, simply edit the `model_path` variable at the top of each script:
+
+```python
+# Model configuration - uncomment the model size you want to use
+model_path = "openai/gpt-oss-120b"  # 120B model (default)
+# model_path = "openai/gpt-oss-20b"  # 20B model - uncomment this line and comment the line above
+```
+
+The scripts automatically configure the appropriate device mapping and settings based on the selected model size.
 
 ## Installation
 
@@ -35,6 +46,10 @@ uv pip install -r requirements.txt
 ## Usage
 
 ### Inference
+
+Before running any script, edit the `model_path` variable to select your desired model size (20B or 120B).
+
+Run a generation script:
 
 ```bash
 python generate_<script_name>.py
