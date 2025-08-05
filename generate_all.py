@@ -26,7 +26,7 @@ device_map = {
         enable_expert_parallel=1
     ),  # Enable Expert Parallelism
     "tp_plan": "auto",  # Enables Tensor Parallelism
-} if "120b" in model_path else "auto"
+} if "120b" in model_path else { "device_map": "auto" }
 
 model = AutoModelForCausalLM.from_pretrained(
     model_path,
