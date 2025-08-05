@@ -1,24 +1,30 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 
-model_path = "openai/gpt-oss-120b"
+# Model configuration - uncomment the model size you want to use
+model_path = "openai/gpt-oss-120b"  # 120B model (default)
+# model_path = "openai/gpt-oss-20b"  # 20B model - uncomment this line and comment the line above
+
+# For 120B model, use padding_side="left".
 tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left")
 
 messages = [{"role": "user", "content": "Explain tensor parallelism in simple terms."}]
+
+# Configuration for 120B model (default)
 chat_prompt = tokenizer.apply_chat_template(messages, tokenize=False)
 
 generation_config = GenerationConfig(
     max_new_tokens=1024,
-    do_sample=True,
 )
 
 device_map = {
     "tp_plan": "auto",  # Tensor Parallelism only
-}
+} if "120b" in model_path else { "device_map": "auto" }
 
 model = AutoModelForCausalLM.from_pretrained(
     model_path,
-    torch_dtype=torch.bfloat16,
+    torch_dtype="auto",
+    attn_implementation="kernels-community/vllm-flash-attn3",  # Flash Attention with Sinks
     **device_map,
 )
 

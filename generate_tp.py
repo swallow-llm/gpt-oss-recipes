@@ -1,7 +1,10 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 
-model_path = "openai/gpt-oss-20b"
+# Model configuration - uncomment the model size you want to use
+model_path = "openai/gpt-oss-120b"  # 120B model (default)
+# model_path = "openai/gpt-oss-20b"  # 20B model - uncomment this line and comment the line above
+
 tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left")
 
 messages = [{"role": "user", "content": "Explain tensor parallelism in simple terms."}]
@@ -14,7 +17,7 @@ generation_config = GenerationConfig(
 
 device_map = {
     "tp_plan": "auto",  # Tensor Parallelism only
-}
+} if "120b" in model_path else "auto"
 
 model = AutoModelForCausalLM.from_pretrained(
     model_path,
