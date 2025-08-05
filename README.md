@@ -58,3 +58,11 @@ For LoRA training on one GPU, run:
 ```bash
 python sft.py --config sft_lora.yaml
 ```
+
+To change the dataset or training hyperparameters, either modify the `sft_lora.yaml` or `sft_full.yaml` files or pass them as command line arguments e.g.:
+
+```bash
+accelerate launch --config_file zero3.yaml \
+    sft.py --config sft_full.yaml \
+    --dataset_name DATASET_NAME
+```
