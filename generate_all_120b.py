@@ -29,7 +29,7 @@ device_map = {
 model = AutoModelForCausalLM.from_pretrained(
     model_path,
     torch_dtype="auto",
-    attn_implementation="vllm-flash-attn3:flash_attn_varlen_func",
+    attn_implementation="kernels-community/vllm-flash-attn3",
     **device_map,
 )
 
