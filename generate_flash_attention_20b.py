@@ -1,7 +1,7 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 
-model_path = "/fsx/vb/new-oai/gpt-oss-20b-trfs"
+model_path = "/fsx/vb/new-oai/gpt-oss-20b-trfs-latest"
 tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left")
 
 messages = [
@@ -17,7 +17,7 @@ generation_config = GenerationConfig(
 model = AutoModelForCausalLM.from_pretrained(
     model_path,
     torch_dtype="auto",
-    attn_implementation="ft-hf-o-c/vllm-flash-attn3:flash_attn_varlen_func", # Flash Attention with Sinks
+    attn_implementation="ft-hf-o-c/vllm-flash-attn3", # Flash Attention with Sinks
     device_map="auto",
 )
 

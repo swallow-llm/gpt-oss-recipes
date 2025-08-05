@@ -1,7 +1,7 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 
-model_path = "/fsx/vb/new-oai/gpt-oss-20b-trfs"
+model_path = "/fsx/vb/new-oai/gpt-oss-20b-trfs-latest"
 tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left")
 
 messages = [

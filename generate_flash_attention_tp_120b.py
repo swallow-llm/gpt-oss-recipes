@@ -21,7 +21,7 @@ device_map = {
 model = AutoModelForCausalLM.from_pretrained(
     model_path,
     torch_dtype="auto",
-    attn_implementation="ft-hf-o-c/vllm-flash-attn3:flash_attn_varlen_func", # Flash Attention with Sinks
+    attn_implementation="ft-hf-o-c/vllm-flash-attn3", # Flash Attention with Sinks
     **device_map,
 )
 
