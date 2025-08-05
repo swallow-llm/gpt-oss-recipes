@@ -30,10 +30,12 @@ First create a virtual environment using e.g. `uv`:
 uv venv gpt-oss --python 3.11 && source gpt-oss/bin/activate && uv pip install --upgrade pip
 ```
 
-Next install PyTorch:
+Next install PyTorch and Triton kernels:
 
 ```sh
 uv pip install torch==2.8.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu128
+
+uv pip install git+https://github.com/triton-lang/triton.git@main#subdirectory=python/triton_kernels
 ```
 
 Finall install the remaining dependencies:
