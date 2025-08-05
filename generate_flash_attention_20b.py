@@ -4,9 +4,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 model_path = "openai/gpt-oss-20b"
 tokenizer = AutoTokenizer.from_pretrained(model_path)
 
-messages = [
-    {"role": "user", "content": "Explain tensor parallelism in simple terms."}
-]
+messages = [{"role": "user", "content": "Explain tensor parallelism in simple terms."}]
 
 model = AutoModelForCausalLM.from_pretrained(
     model_path,
