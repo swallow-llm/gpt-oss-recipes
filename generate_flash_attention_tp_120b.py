@@ -1,12 +1,10 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 
-model_path = "/fsx/vb/new-oai/gpt-oss-120b-trfs"
+model_path = "openai/gpt-oss-120b"
 tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left")
 
-messages = [
-    {"role": "user", "content": "Explain tensor parallelism in simple terms."}
-]
+messages = [{"role": "user", "content": "Explain tensor parallelism in simple terms."}]
 chat_prompt = tokenizer.apply_chat_template(messages, tokenize=False)
 
 generation_config = GenerationConfig(
@@ -21,7 +19,7 @@ device_map = {
 model = AutoModelForCausalLM.from_pretrained(
     model_path,
     torch_dtype="auto",
-    attn_implementation="ft-hf-o-c/vllm-flash-attn3", # Flash Attention with Sinks
+    attn_implementation="ft-hf-o-c/vllm-flash-attn3",  # Flash Attention with Sinks
     **device_map,
 )
 

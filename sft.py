@@ -26,11 +26,12 @@ from trl import (
     SFTTrainer,
     TrlParser,
     ModelConfig,
-    get_peft_config
+    get_peft_config,
 )
 import trl
 from dataclasses import dataclass, field
 from typing import Optional
+
 
 @dataclass
 class ModelConfig(trl.ModelConfig):
@@ -41,9 +42,6 @@ class ModelConfig(trl.ModelConfig):
 
 
 def main(script_args, training_args, model_args):
-    # TODO: Remove once models can be pushed to the Hub
-    training_args.push_to_hub = False
-
     # ------------------------
     # Load model & tokenizer
     # ------------------------

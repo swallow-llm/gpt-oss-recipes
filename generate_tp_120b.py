@@ -1,12 +1,10 @@
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 
-model_path = "/fsx/vb/new-oai/gpt-oss-120b-trfs"
+model_path = "openai/gpt-oss-120b"
 tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left")
 
-messages = [
-    {"role": "user", "content": "Explain tensor parallelism in simple terms."}
-]
+messages = [{"role": "user", "content": "Explain tensor parallelism in simple terms."}]
 chat_prompt = tokenizer.apply_chat_template(messages, tokenize=False)
 
 generation_config = GenerationConfig(

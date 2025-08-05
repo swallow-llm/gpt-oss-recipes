@@ -2,12 +2,15 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 import torch
 from transformers.distributed import DistributedConfig
 
-model_path = "/fsx/vb/new-oai/gpt-oss-120b-trfs"
+model_path = "openai/gpt-oss-120b"
 tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left")
 
 # Set up chat template
 messages = [
-     {"role": "user", "content": "Explain how expert parallelism works in large language models."}
+    {
+        "role": "user",
+        "content": "Explain how expert parallelism works in large language models.",
+    }
 ]
 chat_prompt = tokenizer.apply_chat_template(messages, tokenize=False)
 
@@ -17,7 +20,9 @@ generation_config = GenerationConfig(
 )
 
 device_map = {
-    "distributed_config": DistributedConfig(enable_expert_parallel=1),  # Enable Expert Parallelism
+    "distributed_config": DistributedConfig(
+        enable_expert_parallel=1
+    ),  # Enable Expert Parallelism
     "tp_plan": "auto",  # Enables Tensor Parallelism
 }
 

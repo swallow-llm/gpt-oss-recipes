@@ -58,5 +58,3 @@ For LoRA training on one GPU, run:
 ```bash
 python sft.py --config sft_lora.yaml
 ```
-
-**Note:** Scripts expect model files to be available at `/fsx/vb/new-oai/gpt-oss-{20b,120b}-trfs`. Update the `model_path` variable in each script to point to your model directory.
