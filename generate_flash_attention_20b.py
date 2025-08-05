@@ -10,7 +10,7 @@ model = AutoModelForCausalLM.from_pretrained(
     model_path,
     torch_dtype="auto",
     # Flash Attention with Sinks
-    attn_implementation="kernels-community/vllm-flash-attn3:flash_attn_varlen_func",
+    attn_implementation="kernels-community/vllm-flash-attn3",
     device_map="auto",
 )
 
