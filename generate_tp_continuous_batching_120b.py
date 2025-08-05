@@ -4,13 +4,20 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
 model_path = "/fsx/vb/new-oai/gpt-oss-120b-trfs-latest"
 tokenizer = AutoTokenizer.from_pretrained(model_path, padding_side="left")
 
-messages = [
-    {
-        "role": "user",
-        "content": "Explain how expert parallelism works in large language models.",
-    }
+# Create a batch of different prompts
+batch_messages = [
+    [{"role": "user", "content": "Explain how expert parallelism works in large language models."}],
+    [{"role": "user", "content": "What are the advantages of tensor parallelism over data parallelism?"}],
+    [{"role": "user", "content": "How does continuous batching improve inference throughput in LLMs?"}],
+    [{"role": "user", "content": "Compare the memory requirements of different parallelism strategies."}],
+    [{"role": "user", "content": "What role does attention mechanism play in transformer models?"}],
 ]
-chat_prompt = tokenizer.apply_chat_template(messages, tokenize=False)
+
+# Apply chat template to each set of messages
+chat_prompts = [
+    tokenizer.apply_chat_template(messages, tokenize=False) 
+    for messages in batch_messages
+]
 
 generation_config = GenerationConfig(
     max_new_tokens=1000,
@@ -31,10 +38,21 @@ model = AutoModelForCausalLM.from_pretrained(
 
 model.eval()
 
-# Tokenize and generate
-inputs = tokenizer(chat_prompt, return_tensors="pt").to("cuda")
+# Tokenize the batch of prompts
+inputs = tokenizer(chat_prompts, return_tensors="pt", padding=True).to("cuda")
+
+print(f"Processing batch of {len(chat_prompts)} prompts...")
+print("=" * 80)
+
+# Generate responses for all prompts in the batch
 outputs = model.generate(**inputs, generation_config=generation_config)
 
-# Decode and print
-response = tokenizer.decode(outputs[0], skip_special_tokens=True)
-print("Model response:", response.split("assistant\n")[-1].strip())
+# Decode and print all responses
+for i, output in enumerate(outputs):
+    response = tokenizer.decode(output, skip_special_tokens=True)
+    # Extract just the assistant's response part
+    assistant_response = response.split("assistant\n")[-1].strip()
+    
+    print(f"Prompt {i+1}: {batch_messages[i][0]['content'][:50]}...")
+    print(f"Response {i+1}: {assistant_response}")
+    print("-" * 80)
