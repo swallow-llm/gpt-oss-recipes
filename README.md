@@ -9,6 +9,7 @@ Collection of scripts demonstrating different optimization techniques for OpenAI
 - `generate_tp_120b.py` - 120B model with Tensor Parallelism
 - `generate_flash_attention_tp_120b.py` - 120B model with Flash Attention + Tensor Parallelism
 - `generate_all_120b.py` - 120B model with all optimizations (Expert Parallelism, Tensor Parallelism, Flash Attention)
+- `sft.py` - Script for fine-tuning the model using supervised fine-tuning (SFT). Supports both full-parameter training and LoRA training.
 
 ## Installation
 
