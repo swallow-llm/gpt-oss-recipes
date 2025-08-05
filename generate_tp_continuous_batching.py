@@ -28,7 +28,7 @@ generation_config = GenerationConfig(
 
 device_map = {
     "tp_plan": "auto",  # Enable Tensor Parallelism
-} if "120b" in model_path else "auto"
+} if "120b" in model_path else { "device_map": "auto" }
 
 model = AutoModelForCausalLM.from_pretrained(
     model_path,
