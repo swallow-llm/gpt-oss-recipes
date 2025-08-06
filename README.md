@@ -2,7 +2,7 @@
 
 ![OpenAI GPT-OSS](https://huggingface.co/blog/assets/openai/openai-hf-thumbnail.png)
 
-Collection of scripts demonstrating different optimization techniques for OpenAI's GPT-OSS models (20B and 120B parameters).
+Collection of scripts demonstrating different optimization and fine-tuning techniques for OpenAI's GPT-OSS models (20B and 120B parameters).
 
 **Resources**
 
@@ -14,10 +14,10 @@ Collection of scripts demonstrating different optimization techniques for OpenAI
 
 ## Scripts
 
-- `generate_tp.py` - Model with Tensor Parallelism (supports both 20B and 120B)
-- `generate_flash_attention.py` - Model with Flash Attention + Tensor Parallelism (supports both 20B and 120B)
-- `generate_tp_continuous_batching.py` - Model with Tensor Parallelism and continuous batching (supports both 20B and 120B)
-- `generate_all.py` - Model with all optimizations: Expert Parallelism, Tensor Parallelism, Flash Attention (supports both 20B and 120B)
+- `generate_tp.py` - Model with Tensor Parallelism.
+- `generate_flash_attention.py` - Model with Flash Attention + Tensor Parallelism.
+- `generate_tp_continuous_batching.py` - Model with Flash Attention + Tensor Parallelism and Continuous Batching.
+- `generate_all.py` - Model with all optimizations: Expert Parallelism, Tensor Parallelism, Flash Attention.
 - `sft.py` - Script for fine-tuning the model using supervised fine-tuning (SFT). Supports both full-parameter training and LoRA training.
 
 ### Model Configuration
@@ -40,16 +40,21 @@ First create a virtual environment using e.g. `uv`:
 uv venv gpt-oss --python 3.11 && source gpt-oss/bin/activate && uv pip install --upgrade pip
 ```
 
-Next install PyTorch:
+Next install PyTorch and Triton kernels:
 
 ```sh
 uv pip install torch==2.8.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu128
 ```
 
+If your hardware supports the MXFP4 quantization format, you can also install Triton kernels for optimized performance:
+
+```sh
+uv pip install git+https://github.com/triton-lang/triton.git@main#subdirectory=python/triton_kernels
+```
+
 Finall install the remaining dependencies:
 
 ```sh
-# TODO: Update the requirements to use latest transformers
 uv pip install -r requirements.txt
 ```
 
@@ -57,7 +62,8 @@ uv pip install -r requirements.txt
 
 ### Inference
 
-Before running any script, edit the `model_path` variable to select your desired model size (20B or 120B).
+> [!IMPORTANT]
+> Before running any script, edit the `model_path` variable to select your desired model size (20B or 120B).
 
 Run a generation script:
 
@@ -76,7 +82,11 @@ torchrun --nproc_per_node=x generate_<script_name>.py
 For full-parameter training on one node of 8 GPUs, run:
 
 ```bash
-accelerate launch --config_file zero3.yaml sft.py --config configs/sft_full.yaml
+# Eager attention
+accelerate launch --config_file configs/zero3.yaml sft.py --config configs/sft_full.yaml
+
+# FlashAttention3
+accelerate launch --config_file configs/zero3.yaml sft.py --config configs/sft_full.yaml --attn_implementation kernels-community/vllm-flash-attn3
 ```
 
 For LoRA training on one GPU, run:
@@ -88,7 +98,7 @@ python sft.py --config configs/sft_lora.yaml
 To change the dataset or training hyperparameters, either modify the `sft_lora.yaml` or `sft_full.yaml` files or pass them as command line arguments e.g.:
 
 ```bash
-accelerate launch --config_file zero3.yaml \
-    sft.py --config sft_full.yaml \
+accelerate launch --config_file configs/zero3.yaml \
+    sft.py --config configs/sft_full.yaml \
     --dataset_name DATASET_NAME
 ```

@@ -15,12 +15,10 @@ logging_steps: 1
 per_device_train_batch_size: 4
 gradient_accumulation_steps: 4
 use_peft: true
-lora_r: 2
-lora_alpha: 4
+lora_r: 8
+lora_alpha: 16
 lora_dropout: 0.0
-lora_target_parameters:
-- mlp.experts.down_proj
-- mlp.experts.gate_up_proj
+lora_target_modules: all-linear
 max_length: 4096
 warmup_ratio: 0.03
 lr_scheduler_type: cosine_with_min_lr

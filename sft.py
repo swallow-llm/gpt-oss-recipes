@@ -11,34 +11,29 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-Adapted from: https://github.com/huggingface/trl/blob/main/trl/scripts/sft.py
-"""
 
-import argparse
+"""
+accelerate launch \
+    --config_file configs/zero3.yaml \
+    sft.py \
+    --config configs/sft_full.yaml \
+    --model_name_or_path openai/gpt-oss-20b \
+    --packing true packing_strategy wrapped \
+    --run_name 20b-full-eager \
+    --attn_implementation kernels-community/vllm-flash-attn3
+"""
 
 from datasets import load_dataset
 from transformers import AutoModelForCausalLM, AutoTokenizer, Mxfp4Config
 
 from trl import (
-    SFTConfig,
+    ModelConfig,
     ScriptArguments,
+    SFTConfig,
     SFTTrainer,
     TrlParser,
-    ModelConfig,
     get_peft_config,
 )
-import trl
-from dataclasses import dataclass, field
-from typing import Optional
-
-
-@dataclass
-class ModelConfig(trl.ModelConfig):
-    lora_target_parameters: Optional[list[str]] = field(
-        default=None,
-        metadata={"help": "List of target parameters for LoRA."},
-    )
 
 
 def main(script_args, training_args, model_args):
@@ -71,10 +66,6 @@ def main(script_args, training_args, model_args):
     # -------------
     # Train model
     # -------------
-    peft_config = get_peft_config(model_args)
-    if peft_config is not None:
-        peft_config.target_parameters = model_args.lora_target_parameters
-
     trainer = SFTTrainer(
         model=model,
         args=training_args,
@@ -83,26 +74,17 @@ def main(script_args, training_args, model_args):
         if training_args.eval_strategy != "no"
         else None,
         processing_class=tokenizer,
-        peft_config=peft_config,
+        peft_config=get_peft_config(model_args),
     )
 
     trainer.train()
     trainer.save_model(training_args.output_dir)
-
-
-def make_parser(subparsers: argparse._SubParsersAction = None):
-    dataclass_types = (ScriptArguments, SFTConfig, ModelConfig)
-    if subparsers is not None:
-        parser = subparsers.add_parser(
-            "sft", help="Run the SFT training script", dataclass_types=dataclass_types
-        )
-    else:
-        parser = TrlParser(dataclass_types)
-    return parser
+    if training_args.push_to_hub:
+        trainer.push_to_hub(dataset_name=script_args.dataset_name)
 
 
 if __name__ == "__main__":
-    parser = make_parser()
+    parser = TrlParser((ScriptArguments, SFTConfig, ModelConfig))
     script_args, training_args, model_args, _ = parser.parse_args_and_config(
         return_remaining_strings=True
     )
