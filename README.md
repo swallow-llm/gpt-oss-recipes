@@ -1,6 +1,16 @@
 # OpenAI GPT-OSS Recipes
 
+![OpenAI GPT-OSS](https://huggingface.co/blog/assets/openai/openai-hf-thumbnail.png)
+
 Collection of scripts demonstrating different optimization and fine-tuning techniques for OpenAI's GPT-OSS models (20B and 120B parameters).
+
+**Resources**
+
+- [Blog - Welcome GPT-OSS: the new open-source model family from OpenAI](https://huggingface.co/blog/welcome-openai-gpt-oss)
+- [Cookbook - Fine-tuning with GPT-OSS and Hugging Face](https://cookbook.openai.com/articles/gpt-oss/fine-tune-transfomers)
+- [OpenAI GPT-OSS 20B model](https://huggingface.co/openai/gpt-oss-20b)
+- [OpenAI GPT-OSS 120B model](https://huggingface.co/openai/gpt-oss-120b)
+- [Release collection on Hugging Face](https://huggingface.co/collections/openai/gpt-oss-68911959590a1634ba11c7a4)
 
 ## Scripts
 
