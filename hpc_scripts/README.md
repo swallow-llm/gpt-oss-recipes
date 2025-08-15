@@ -24,9 +24,36 @@ cd gpt-oss-recipes
 
 ### How to prepare uv virtual environments
 
-- For ABCI 3.0 and TSUBAME 4.0, create a uv virtual environment and install the required dependencies. See [this instructions](https://docs.vllm.ai/projects/recipes/en/latest/OpenAI/GPT-OSS.html) for more details.
+- Create a uv virtual environment and install the required dependencies. See [this instructions](https://docs.vllm.ai/projects/recipes/en/latest/OpenAI/GPT-OSS.html) for more details.
+- For ABCI 3.0,
 
 ```shell
+source /etc/profile.d/modules.sh
+
+module purge
+module load cuda/12.8/12.8.1
+
+export UV_LINK_MODE=copy
+
+uv venv -p 3.12
+source .venv/bin/activate
+
+uv pip install --pre vllm==0.10.1+gptoss \
+    --extra-index-url https://wheels.vllm.ai/gpt-oss/ \
+    --extra-index-url https://download.pytorch.org/whl/nightly/cu128 \
+    --index-strategy unsafe-best-match \
+    --no-cache
+```
+
+- For TSUBAME 4.0,
+
+```shell
+module purge
+module load gcc/14.2.0
+module load cuda/12.8.0
+
+export UV_LINK_MODE=copy
+
 uv venv -p 3.12
 source .venv/bin/activate
 
