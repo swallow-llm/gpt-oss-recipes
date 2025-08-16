@@ -8,10 +8,6 @@
 
 cd "${PBS_O_WORKDIR}" || exit
 
-# ulimit -v unlimited
-# ulimit -m unlimited
-# ulimit -l unlimited
-
 # shellcheck source=/dev/null
 source /etc/profile.d/modules.sh
 
@@ -21,15 +17,15 @@ module load cuda/12.8/12.8.1
 # git clone https://github.com/susumuota/gpt-oss-recipes.git
 # cd gpt-oss-recipes
 #
-# uv venv gpt-oss --python 3.11 && source gpt-oss/bin/activate && uv pip install --upgrade pip
-# uv pip install torch==2.8.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/test/cu128
-# skip this for H100, H200:
-#     uv pip install git+https://github.com/triton-lang/triton.git@main#subdirectory=python/triton_kernels
-# uv pip install -r requirements.txt
+# uv venv -p 3.12
+# source .venv/bin/activate
+
+# uv pip install "torch>=2.8.0" --index-url https://download.pytorch.org/whl/cu128
+# uv pip install "trl>=0.21.0" "peft>=0.17.0" "transformers>=4.55.2" trackio
 # uv pip install deepspeed
 
 # shellcheck source=/dev/null
-source gpt-oss/bin/activate
+source .venv/bin/activate
 
 accelerate launch \
     --config_file configs/zero3.yaml \

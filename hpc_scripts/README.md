@@ -79,3 +79,25 @@ singularity build vllm-openai-gptoss.sif docker://vllm/vllm-openai:gptoss
 apptainer build vllm-openai-gptoss.sif docker://vllm/vllm-openai:gptoss
 ```
 
+## Supervised Fine-tuning
+
+### How to prepare uv virtual environments
+
+- Create a uv virtual environment and install the required dependencies. See [this instructions](https://cookbook.openai.com/articles/gpt-oss/fine-tune-transfomers) for more details.
+- For ABCI 3.0,
+
+```shell
+source /etc/profile.d/modules.sh
+
+module purge
+module load cuda/12.8/12.8.1
+
+export UV_LINK_MODE=copy
+
+uv venv -p 3.12
+source .venv/bin/activate
+
+uv pip install "torch>=2.8.0" --index-url https://download.pytorch.org/whl/cu128
+uv pip install "trl>=0.21.0" "peft>=0.17.0" "transformers>=4.55.2" trackio
+uv pip install deepspeed
+```
