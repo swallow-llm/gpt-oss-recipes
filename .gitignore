@@ -5,3 +5,6 @@
 *.log
 *.out
 *.err
+
+hostfile.*
+.deepspeed_env
