@@ -4,6 +4,8 @@
 #PBS -l walltime=8:00:00
 #PBS -N sft_gpt_oss_20b
 #PBS -k oe
+#PBS -j oe
+#PBS -v USE_SSH=1
 
 
 cd "${PBS_O_WORKDIR}" || exit
