@@ -98,6 +98,8 @@ uv venv -p 3.12
 source .venv/bin/activate
 
 uv pip install "torch>=2.8.0" --index-url https://download.pytorch.org/whl/cu128
-uv pip install "trl>=0.21.0" "peft>=0.17.0" "transformers>=4.55.2" trackio
-uv pip install deepspeed
+uv pip install "trl>=0.21.0" "peft>=0.17.0" "transformers>=4.55.2" "triton>=3.4" "kernels>=0.9.0"
+uv pip install accelerate deepspeed trackio wandb
+hf auth login
+wandb login
 ```
