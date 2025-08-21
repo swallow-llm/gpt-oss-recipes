@@ -15,7 +15,6 @@ source /etc/profile.d/modules.sh
 
 module purge
 module load cuda/12.8/12.8.1
-module load hpcx/2.20
 
 # git clone https://github.com/susumuota/gpt-oss-recipes.git
 # cd gpt-oss-recipes
@@ -56,6 +55,7 @@ accelerate launch \
     --num_processes "${NUM_PROCESSES}" \
     --main_process_ip "${MASTER_ADDR}" \
     --main_process_port "${MASTER_PORT}" \
+    --rdzv_backend c10d \
     --max_restarts 0 \
     sft.py \
     --config configs/sft_full.yaml
