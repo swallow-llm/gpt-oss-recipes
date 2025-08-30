@@ -37,7 +37,7 @@ export UV_LINK_MODE=copy
 uv venv -p 3.12
 source .venv/bin/activate
 
-uv pip install vllm==0.10.1 --torch-backend=cu128  # not auto
+uv pip install vllm==0.10.1.1 --torch-backend=cu128  # not auto
 
 qsub -P group hpc_scripts/infer_uv_abci.sh
 ```
@@ -54,7 +54,7 @@ export UV_LINK_MODE=copy
 uv venv -p 3.12
 source .venv/bin/activate
 
-uv pip install vllm==0.10.1 --torch-backend=cu128  # not auto
+uv pip install vllm==0.10.1.1 --torch-backend=cu128  # not auto
 
 qsub -g group hpc_scripts/infer_uv_tsubame.sh
 ```
