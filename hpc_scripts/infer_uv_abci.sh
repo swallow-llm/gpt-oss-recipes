@@ -1,9 +1,11 @@
 #!/bin/bash
 #PBS -q rt_HG
 #PBS -l select=1
-#PBS -l walltime=8:00:00
-#PBS -N infer_gpt_oss_120b
+#PBS -l walltime=1:00:00
+#PBS -N infer_gpt_oss
 #PBS -k oe
+#PBS -j oe
+#PBS -v USE_SSH=1
 
 
 cd "${PBS_O_WORKDIR}" || exit
@@ -19,27 +21,36 @@ module load cuda/12.8/12.8.1
 # uv venv -p 3.12
 # source .venv/bin/activate
 #
-# uv pip install --pre vllm==0.10.1+gptoss \
-#     --extra-index-url https://wheels.vllm.ai/gpt-oss/ \
-#     --extra-index-url https://download.pytorch.org/whl/nightly/cu128 \
-#     --index-strategy unsafe-best-match \
-#     --no-cache
+# uv pip install vllm==0.10.1 --torch-backend=cu128  # not auto
+
+model_name="openai/gpt-oss-20b"
+# model_name="openai/gpt-oss-120b"
 
 # for H100, H200 GPUs
 export TORCH_CUDA_ARCH_LIST="9.0"
-
 # use integer GPU index instead of UUID to avoid errors
+# for rt_HG
 export CUDA_VISIBLE_DEVICES="0"
+# for rt_HF
+# export CUDA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7"
+
+JOBID=$(echo "${PBS_JOBID}" | cut -d '.' -f 1)
+# if you use a rt_HG job, you need to change the port number to avoid conflicts with other users
+VLLM_PORT=$(( 50000 + JOBID % 10000 ))
+# if you use a rt_HF job, you don't need to change the port number. just use the default port 8000.
+# VLLM_PORT=8000
+VLLM_IP=$(hostname --ip-address | awk '{print $1}')
+
+echo "vLLM server will start at ${VLLM_IP}:${VLLM_PORT}"
+echo "You can port-forward it to your local machine with the following command:"
+echo "    ssh abci -L 8000:${VLLM_IP}:${VLLM_PORT} -N"
+echo "Then you can access the vLLM server at http://localhost:8000/v1/models from your local machine"
 
 # shellcheck source=/dev/null
 source .venv/bin/activate
 
-# for 20b with 1 GPU
-# vllm serve openai/gpt-oss-20b
-
-# for 120b with 1 GPU
-vllm serve openai/gpt-oss-120b
+# for 20b and 120b with 1 GPU with a rt_HG job
+vllm serve "$model_name" --port "$VLLM_PORT"
 
 # for 120b with 8 GPUs with a rt_HF job (not rt_HG)
-# export CUDA_VISIBLE_DEVICES="0,1,2,3,4,5,6,7"
-# vllm serve openai/gpt-oss-120b --tensor-parallel-size 8
+# vllm serve "$model_name" --port "$VLLM_PORT" --tensor-parallel-size 8
