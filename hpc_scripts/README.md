@@ -22,14 +22,13 @@ cd gpt-oss-recipes
 
 ## Inference
 
-### How to prepare uv virtual environments
+### [Option 1] With uv virtual environments
 
 - Create a uv virtual environment and install the required dependencies. See [this instructions](https://docs.vllm.ai/projects/recipes/en/latest/OpenAI/GPT-OSS.html) for more details.
 - For ABCI 3.0,
 
 ```shell
 source /etc/profile.d/modules.sh
-
 module purge
 module load cuda/12.8/12.8.1
 
@@ -39,13 +38,15 @@ uv venv -p 3.12
 source .venv/bin/activate
 
 uv pip install vllm==0.10.1 --torch-backend=cu128  # not auto
+
+qsub -P group hpc_scripts/infer_uv_abci.sh
 ```
 
 - For TSUBAME 4.0,
 
 ```shell
 module purge
-module load gcc/14.2.0
+# module load gcc/14.2.0
 module load cuda/12.8.0
 
 export UV_LINK_MODE=copy
@@ -53,32 +54,44 @@ export UV_LINK_MODE=copy
 uv venv -p 3.12
 source .venv/bin/activate
 
-uv pip install --pre vllm==0.10.1+gptoss \
-    --extra-index-url https://wheels.vllm.ai/gpt-oss/ \
-    --extra-index-url https://download.pytorch.org/whl/nightly/cu128 \
-    --index-strategy unsafe-best-match \
-    --no-cache
+uv pip install vllm==0.10.1 --torch-backend=cu128  # not auto
+
+qsub -g group hpc_scripts/infer_uv_tsubame.sh
 ```
 
-### How to prepare vLLM containers
+### [Option 2] With Singularity/Apptainer containers
 
-- For ABCI 3.0, convert the [vLLM Docker image](https://hub.docker.com/r/vllm/vllm-openai/tags) to a Singularity image.
+- Convert the [vLLM Docker image](https://hub.docker.com/r/vllm/vllm-openai/tags) to a Singularity image.
+- For ABCI 3.0,
 
 ```shell
 source /etc/profile.d/modules.sh
 module load singularitypro/4.1.7
+
+cd ..
+mkdir -p sif
+cd sif
 singularity pull vllm-openai-v0.10.1.1.sif docker://vllm/vllm-openai:v0.10.1.1
+cd ../gpt-oss-recipes
+
+qsub -P group hpc_scripts/infer_uv_abci.sh
 ```
 
-- For TSUBAME 4.0, convert the [vLLM Docker image](https://hub.docker.com/r/vllm/vllm-openai/tags) to a Apptainer image.
+- For TSUBAME 4.0,
 
 ```shell
+cd ..
+mkdir -p sif
+cd sif
 apptainer pull vllm-openai-v0.10.1.1.sif docker://vllm/vllm-openai:v0.10.1.1
+cd ../gpt-oss-recipes
+
+qsub -g group hpc_scripts/infer_uv_tsubame.sh
 ```
 
 ## Supervised Fine-tuning
 
-### How to prepare uv virtual environments
+### With uv virtual environments
 
 - Create a uv virtual environment and install the required dependencies. See [this instructions](https://cookbook.openai.com/articles/gpt-oss/fine-tune-transfomers) for more details.
 - For ABCI 3.0,
@@ -97,6 +110,10 @@ source .venv/bin/activate
 uv pip install "torch>=2.8.0" --index-url https://download.pytorch.org/whl/cu128
 uv pip install "trl>=0.21.0" "peft>=0.17.0" "transformers>=4.55.2" "triton>=3.4" "kernels>=0.9.0"
 uv pip install accelerate deepspeed trackio wandb
+
 hf auth login
 wandb login
+
+qsub -P group hpc_scripts/sft_abci.sh
+# qsub -P group hpc_scripts/sft_multi_abci.sh
 ```

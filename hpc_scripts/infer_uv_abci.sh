@@ -49,8 +49,8 @@ echo "Then you can access the vLLM server at http://localhost:8000/v1/models fro
 # shellcheck source=/dev/null
 source .venv/bin/activate
 
-# for 20b and 120b with 1 GPU with a rt_HG job
+# for 20b and 120b with 1 GPU with rt_HG
 vllm serve "$model_name" --port "$VLLM_PORT"
 
-# for 120b with 8 GPUs with a rt_HF job (not rt_HG)
+# for 120b with 8 GPUs with rt_HF (not rt_HG)
 # vllm serve "$model_name" --port "$VLLM_PORT" --tensor-parallel-size 8
