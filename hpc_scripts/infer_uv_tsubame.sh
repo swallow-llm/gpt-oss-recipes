@@ -27,7 +27,7 @@ module load cuda/12.8.0
 # uv venv -p 3.12
 # source .venv/bin/activate
 #
-# uv pip install vllm==0.10.1 --torch-backend=cu128  # not auto
+# uv pip install vllm==0.10.1.1 --torch-backend=cu128  # not auto
 
 model_name="openai/gpt-oss-20b"
 # model_name="openai/gpt-oss-120b"
@@ -40,11 +40,9 @@ export CUDA_VISIBLE_DEVICES="0"
 # for node_h
 # export CUDA_VISIBLE_DEVICES="0,1"
 
-# shellcheck disable=SC2153
-JOBID="$JOB_ID"
-# if you use a rt_HG job, you need to change the port number to avoid conflicts with other users
-VLLM_PORT=$(( 50000 + JOBID % 10000 ))
-# if you use a rt_HF job, you don't need to change the port number. just use the default port 8000.
+# if you use gpu_1, you need to change the port number to avoid conflicts with other users
+VLLM_PORT=$(( 50000 + JOB_ID % 10000 ))
+# if you use node_f, you don't need to change the port number. just use the default port 8000.
 # VLLM_PORT=8000
 VLLM_IP=$(hostname --ip-address | awk '{print $1}')
 

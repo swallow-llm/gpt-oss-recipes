@@ -21,7 +21,7 @@ module load cuda/12.8/12.8.1
 # uv venv -p 3.12
 # source .venv/bin/activate
 #
-# uv pip install vllm==0.10.1 --torch-backend=cu128  # not auto
+# uv pip install vllm==0.10.1.1 --torch-backend=cu128  # not auto
 
 model_name="openai/gpt-oss-20b"
 # model_name="openai/gpt-oss-120b"
