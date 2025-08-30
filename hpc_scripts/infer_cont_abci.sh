@@ -43,8 +43,9 @@ echo "You can port-forward it to your local machine with the following command:"
 echo "    ssh abci -L 8000:${VLLM_IP}:${VLLM_PORT} -N"
 echo "Then you can access the vLLM server at http://localhost:8000/v1/models from your local machine"
 
-# for 20b and 120b with 1 GPU with a rt_HG job
+# for 20b and 120b with 1 GPU with rt_HG
 singularity run --nv -B /apps "$sif_path" --model "$model_name" --port "$VLLM_PORT"
 
-# for 120b with 8 GPUs with a rt_HF job (not rt_HG)
-# singularity run --nv -B /apps "$sif_path" --model "$model_name" --port "$VLLM_PORT" --tensor-parallel-size 8
+# for 120b with 8 GPUs with rt_HF (not rt_HG)
+# singularity run --nv -B /apps "$sif_path" --model "$model_name" --port "$VLLM_PORT" \
+#     --tensor-parallel-size 8
