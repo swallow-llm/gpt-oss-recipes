@@ -38,11 +38,7 @@ export UV_LINK_MODE=copy
 uv venv -p 3.12
 source .venv/bin/activate
 
-uv pip install --pre vllm==0.10.1+gptoss \
-    --extra-index-url https://wheels.vllm.ai/gpt-oss/ \
-    --extra-index-url https://download.pytorch.org/whl/nightly/cu128 \
-    --index-strategy unsafe-best-match \
-    --no-cache
+uv pip install vllm==0.10.1 --torch-backend=cu128  # not auto
 ```
 
 - For TSUBAME 4.0,
@@ -69,14 +65,15 @@ uv pip install --pre vllm==0.10.1+gptoss \
 - For ABCI 3.0, convert the [vLLM Docker image](https://hub.docker.com/r/vllm/vllm-openai/tags) to a Singularity image.
 
 ```shell
+source /etc/profile.d/modules.sh
 module load singularitypro/4.1.7
-singularity build vllm-openai-gptoss.sif docker://vllm/vllm-openai:gptoss
+singularity pull vllm-openai-v0.10.1.1.sif docker://vllm/vllm-openai:v0.10.1.1
 ```
 
 - For TSUBAME 4.0, convert the [vLLM Docker image](https://hub.docker.com/r/vllm/vllm-openai/tags) to a Apptainer image.
 
 ```shell
-apptainer build vllm-openai-gptoss.sif docker://vllm/vllm-openai:gptoss
+apptainer pull vllm-openai-v0.10.1.1.sif docker://vllm/vllm-openai:v0.10.1.1
 ```
 
 ## Supervised Fine-tuning
