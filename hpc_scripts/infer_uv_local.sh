@@ -25,7 +25,7 @@ export VLLM_USE_FLASHINFER_MXFP4_BF16_MOE="1"
 # mxfp8 activation for MoE. faster, but higher risk for accuracy.
 # export VLLM_USE_FLASHINFER_MXFP4_MOE="1"
 
-# for Blackwell (H200 or RTX PRO 6000 Blackwell)
+# for Blackwell (B200, RTX PRO 6000 Blackwell)
 export TORCH_CUDA_ARCH_LIST="12.0"
 # for H100, H200 GPUs
 # export TORCH_CUDA_ARCH_LIST="9.0"

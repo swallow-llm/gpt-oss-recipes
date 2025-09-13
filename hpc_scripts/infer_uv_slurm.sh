@@ -43,7 +43,7 @@ VLLM_IP=$(hostname --ip-address | awk '{print $1}')
 
 echo "vLLM server will start at ${VLLM_IP}:${VLLM_PORT}"
 echo "You can port-forward it to your local machine with the following command:"
-echo "    ssh tsubame -L 8000:${VLLM_IP}:${VLLM_PORT} -N"
+echo "    ssh host -L 8000:${VLLM_IP}:${VLLM_PORT} -N"
 echo "Then you can access the vLLM server at http://localhost:8000/v1/models from your local machine"
 
 # shellcheck source=/dev/null
